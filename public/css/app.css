@@ -109,13 +109,13 @@ nav ul li a:hover::after, nav ul li a.active::after {
 
 .container-fotos {
     display: flex;
-    margin: 20px;
+    margin: 50px;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 20px;
     background-color: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding-top: 5px;
     img {
         width: 300px; /* Ajusta el tamaño de la imagen */
         height: auto; /* Mantén la proporción de la imagen */
@@ -128,6 +128,7 @@ nav ul li a:hover::after, nav ul li a.active::after {
 .foto-container {
     position: relative;
     display: inline-block;
+    padding: 5px;
 }
 
 .foto-container img {
@@ -163,7 +164,7 @@ nav ul li a:hover::after, nav ul li a.active::after {
 }
 
 .foto-container:hover img {
-    transform: scale(1.1); /* Escala al pasar el cursor */
+    transform: scale(1.05); /* Escala al pasar el cursor */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Aumenta la sombra */
 }
 

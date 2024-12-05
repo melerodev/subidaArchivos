@@ -28,7 +28,7 @@
     @endforeach
     </section>
     <footer>
-        <i class="fa-brands fa-github"></i>
+        <a href="https://github.com/melerodev/subidaArchivos" target="_blank"><i class="fa-brands fa-github"></i></a>
         <p>Designed by Alejandro Melero Zhohal</p>
     </footer>
 </body>
