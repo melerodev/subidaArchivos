@@ -25,11 +25,16 @@
             <input type="file" name="file" required>
             <input type="text" name="action" placeholder="URL de la imagen">
             <button type="submit">Subir</button>
-        </form>
+            <p class="error"><em>Solo se permiten archivos de tipo <strong>.jpg</strong>, <strong>.jpeg</strong>, <strong>.png</strong> y <strong>.gif</strong> y con un máximo de <strong>2MB</strong></em></p>        </form>
     </section>
     <footer>
         <a href="https://github.com/melerodev/subidaArchivos" target="_blank"><i class="fa-brands fa-github"></i></a>
         <p>Designed by Alejandro Melero Zhohal</p>
     </footer>
+    @if (session('error'))
+        <script>
+            document.querySelector('.error').style.display = 'block';
+        </script>
+    @endif
 </body>
 </html>
