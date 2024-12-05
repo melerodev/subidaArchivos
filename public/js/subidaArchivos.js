@@ -20,3 +20,12 @@ text.addEventListener('input', () => {
         button.disabled = false;
     }
 });
+
+
+file.addEventListener('change', () => {
+    if (file.files.length > 0) {
+        text.disabled = true;
+    } else {
+        text.disabled = false;
+    }
+});
