@@ -218,15 +218,19 @@ img:hover {
         }
 
         [type="text"] {
-            /* Tus estilos aquí */
             border: 2px solid var(--secondary-color);
             padding: 10px;
             font-size: 1.2rem;
             border-radius: 5px;
             margin-top: 10px;
         }
+
+        [type="text"]:focus {
+            outline: none; /* Quita el borde al hacer clic */
+        }
+        
         p {
-            display: block;
+            display: none;
             color: red;
         }
     }

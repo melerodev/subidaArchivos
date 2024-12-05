@@ -7,73 +7,98 @@ use App\Models\File;
 
 class UploadController extends Controller
 {
+    // expresion regular para una
     public function upload(Request $request)
     {
-        if ($this->esValido($request)) {
-            // Guardar el archivo subido en el almacenamiento privado
-            $path = $request->file('file')->store('private', 'local');
-            $realPath = storage_path('app/private') . '/' . $path; // Ruta real del archivo
+        $urlRegex = '/^https?:\/\/.*\.(png|jpg|jpeg|gif)$/';
+        if ($request->input("action") > 0) {
+            $url = $request->input('action');
+            if ( preg_match($urlRegex, $url)) {
+                $imageContents = file_get_contents($url);
+                if ($imageContents === false) {
+                    return redirect()->route('subida-archivos')->with('error', '');
+                }
 
-            // Obtener las dimensiones originales de la imagen
-            list($anchoOriginal, $altoOriginal) = getimagesize($realPath);
-
-            // Crear una imagen de destino con las nuevas dimensiones
-            $imagenDestino = imagecreatetruecolor(300, 300);
-
-            // Crear una imagen desde el archivo original dependiendo del tipo
-            $extension = strtolower(pathinfo($realPath, PATHINFO_EXTENSION));
-            if ($extension === 'jpeg' || $extension === 'jpg') {
-                $imagenFuente = imagecreatefromjpeg($realPath);
-            } elseif ($extension === 'png') {
-                $imagenFuente = imagecreatefrompng($realPath);
-                imagealphablending($imagenDestino, false);
-                imagesavealpha($imagenDestino, true);
-            } elseif ($extension === 'gif') {
-                $imagenFuente = imagecreatefromgif($realPath);
+                $path = storage_path('app/private/privado')  . '/' . basename($url);
+                file_put_contents($path, $imageContents);  // Guardar el archivo en el almacenamiento privado
+                
+                $file = new File();
+                $file->path = $path;
+                $file->image64 = base64_encode($imageContents);
+                $file->image = $imageContents;
+                $file->type = pathinfo($path, PATHINFO_EXTENSION);
+                $file->save();
+                return redirect()->route('inicio');
             } else {
-                return redirect()->route('inicio')->with('error', 'Formato de imagen no soportado.');
+                return redirect()->route('subida-archivos')->with('error', '');
             }
-
-            // Redimensionar la imagen
-            imagecopyresampled(
-                $imagenDestino,
-                $imagenFuente,
-                0, 0, 0, 0,
-                300,
-                300,
-                $anchoOriginal,
-                $altoOriginal
-            );
-
-            // Guardar la imagen redimensionada (reemplaza la original)
-            if ($extension === 'jpeg' || $extension === 'jpg') {
-                imagejpeg($imagenDestino, $realPath, 90);
-            } elseif ($extension === 'png') {
-                imagepng($imagenDestino, $realPath);
-            } elseif ($extension === 'gif') {
-                imagegif($imagenDestino, $realPath);
-            }
-
-            // Liberar memoria
-            imagedestroy($imagenDestino);
-            imagedestroy($imagenFuente);
-
-            // Obtener el contenido del archivo redimensionado
-            $data = file_get_contents($realPath);
-
-            // Construir el objeto para guardar en la base de datos
-            $file = new File();
-            $file->path = $path;
-            $file->image64 = base64_encode($data);
-            $file->image = $data;
-            $file->type = $extension;
-
-            // Guardar en la base de datos
-            $file->save();
-
-            return redirect()->route('inicio')->with('success');
         } else {
-            return redirect()->route('subida-archivos')->with('error', 'Archivo no válido.');
+            if ($this->esValido($request)) {
+                // Guardar el archivo subido en el almacenamiento privado
+                $path = $request->file('file')->store('private', 'local');
+                $realPath = storage_path('app/private') . '/' . $path; // Ruta real del archivo
+    
+                // Obtener las dimensiones originales de la imagen
+                list($anchoOriginal, $altoOriginal) = getimagesize($realPath);
+    
+                // Crear una imagen de destino con las nuevas dimensiones
+                $imagenDestino = imagecreatetruecolor(300, 300);
+    
+                // Crear una imagen desde el archivo original dependiendo del tipo
+                $extension = strtolower(pathinfo($realPath, PATHINFO_EXTENSION));
+                if ($extension === 'jpeg' || $extension === 'jpg') {
+                    $imagenFuente = imagecreatefromjpeg($realPath);
+                } elseif ($extension === 'png') {
+                    $imagenFuente = imagecreatefrompng($realPath);
+                    imagealphablending($imagenDestino, false);
+                    imagesavealpha($imagenDestino, true);
+                } elseif ($extension === 'gif') {
+                    $imagenFuente = imagecreatefromgif($realPath);
+                } else {
+                    return redirect()->route('subida-archivos')->with('error', '');
+                }
+    
+                // Redimensionar la imagen
+                imagecopyresampled(
+                    $imagenDestino,
+                    $imagenFuente,
+                    0, 0, 0, 0,
+                    300,
+                    300,
+                    $anchoOriginal,
+                    $altoOriginal
+                );
+    
+                // Guardar la imagen redimensionada (reemplaza la original)
+                if ($extension === 'jpeg' || $extension === 'jpg') {
+                    imagejpeg($imagenDestino, $realPath, 90);
+                } elseif ($extension === 'png') {
+                    imagepng($imagenDestino, $realPath);
+                } elseif ($extension === 'gif') {
+                    imagegif($imagenDestino, $realPath);
+                }
+    
+                // Liberar memoria
+                imagedestroy($imagenDestino);
+                imagedestroy($imagenFuente);
+    
+                // Obtener el contenido del archivo redimensionado
+                $data = file_get_contents($realPath);
+    
+                // Construir el objeto para guardar en la base de datos
+                $file = new File();
+                $file->path = $path;
+                $file->image64 = base64_encode($data);
+                $file->image = $data;
+                $file->type = $extension;
+    
+                // Guardar en la base de datos
+                $file->save();
+    
+                return redirect()->route('inicio');
+            } else {
+                return redirect()->route('subida-archivos')->with('error', '');
+            }
         }
     }
 

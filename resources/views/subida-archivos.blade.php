@@ -22,19 +22,20 @@
         <form action="{{ route('upload') }}" method="post" enctype="multipart/form-data">
             @csrf
             <h1>Subir archivos</h1>
-            <input type="file" name="file" required>
-            <input type="text" name="action" placeholder="URL de la imagen">
-            <button type="submit">Subir</button>
+            <input id="file" type="file" name="file" required>
+            <input id="text" type="text" name="action" placeholder="URL de la imagen">
+            <button id="button" type="submit">Subir</button>
             <p class="error"><em>Solo se permiten archivos de tipo <strong>.jpg</strong>, <strong>.jpeg</strong>, <strong>.png</strong> y <strong>.gif</strong> y con un máximo de <strong>2MB</strong></em></p>        </form>
     </section>
     <footer>
         <a href="https://github.com/melerodev/subidaArchivos" target="_blank"><i class="fa-brands fa-github"></i></a>
-        <p>Designed by Alejandro Melero Zhohal</p>
+        <p>By: Alejandro Melero Zhohal</p>
     </footer>
     @if (session('error'))
         <script>
             document.querySelector('.error').style.display = 'block';
         </script>
     @endif
+    <script src={{ url('/js/subidaArchivos.js') }}></script>
 </body>
 </html>
