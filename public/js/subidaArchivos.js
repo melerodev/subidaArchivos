@@ -26,11 +26,12 @@ text.addEventListener('input', () => {
 
 file.addEventListener('change', () => {
     if (file.files.length > 0) {
-        console.log("hola");
         button.disabled = false;
+        text.disabled = true;
         button.style.backgroundColor = '#f07e13';
     } else {
         button.disabled = true;
+        text.disabled = false;
         button.style.backgroundColor = '#f5af6e';
     }
 });

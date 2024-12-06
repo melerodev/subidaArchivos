@@ -25,7 +25,7 @@
             <input id="file" type="file" name="file" required>
             <input id="text" type="text" name="action" placeholder="URL de la imagen">
             <button id="button" type="submit">Subir</button>
-            <p class="error"><em>Solo se permiten archivos de tipo <strong>.jpg</strong>, <strong>.jpeg</strong>, <strong>.png</strong> y <strong>.gif</strong> y con un máximo de <strong>2MB</strong></em></p>        </form>
+            <p class="error"><em>Solo se permiten archivos de tipo <strong>.jpg</strong>, <strong>.jpeg</strong> y <strong>.png</strong> y con un máximo de <strong>2MB</strong></em></p>        </form>
     </section>
     <footer>
         <a href="https://github.com/melerodev/subidaArchivos" target="_blank"><i class="fa-brands fa-github"></i></a>

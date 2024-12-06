@@ -15,8 +15,13 @@ class UploadController extends Controller
                 $url = $request->input('action');
                 if (preg_match($urlRegex, $url)) {
                     $imageContents = file_get_contents($url);
-                    if ($imageContents === false) {
+                    if ($url === false) {
                         return redirect()->route('subida-archivos')->with('error', 'Error al obtener el contenido de la imagen.');
+                    }
+
+                    // si lo subido no es una imagen error
+                    if (getimagesize($url) === false) {
+                        return redirect()->route('subida-archivos')->with('error', 'El archivo no es una imagen.');
                     }
 
                     $path = storage_path('app/private/') . '/' . basename($url);
