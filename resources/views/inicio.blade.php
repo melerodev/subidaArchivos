@@ -23,7 +23,7 @@
     @foreach($files as $file)
         <div class="foto-container">
             <img src="data:image/{{ $file->type }};base64,{{ $file->image64 }}" alt="Imagen subida">
-            <a  class="papelera"><i class="fas fa-trash-alt"></i></a>
+            <a class="papelera"><i class="fas fa-trash-alt"></i></a>
         </div>
     @endforeach
     </section>

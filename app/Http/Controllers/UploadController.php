@@ -7,25 +7,30 @@ use App\Models\File;
 
 class UploadController extends Controller
 {
-    // expresion regular para una
+    // expresión regular para una
     public function upload(Request $request)
     {
-        $urlRegex = '/^https?:\/\/.*\.(png|jpg|jpeg|gif)$/';
+        $urlRegex = '/\b((http|https):\/\/)?((www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(\/[a-zA-Z0-9-._~:\/?#[\]@!$&\'()*+,;=]*)?\b/';
         if ($request->input("action") > 0) {
             $url = $request->input('action');
-            if ( preg_match($urlRegex, $url)) {
+            if (preg_match($urlRegex, $url)) {
                 $imageContents = file_get_contents($url);
                 if ($imageContents === false) {
                     return redirect()->route('subida-archivos')->with('error', '');
                 }
 
-                $path = storage_path('app/private/privado')  . '/' . basename($url);
+                $path = storage_path('app/private/') . '/' . basename($url);
                 file_put_contents($path, $imageContents);  // Guardar el archivo en el almacenamiento privado
-                
+
+                // Redimensionar la imagen
+                if (!$this->redimensionarImagen($path, 300, 300)) {
+                    return redirect()->route('subida-archivos')->with('error', '');
+                }
+
                 $file = new File();
                 $file->path = $path;
-                $file->image64 = base64_encode($imageContents);
-                $file->image = $imageContents;
+                $file->image64 = base64_encode(file_get_contents($path));
+                $file->image = file_get_contents($path);
                 $file->type = pathinfo($path, PATHINFO_EXTENSION);
                 $file->save();
                 return redirect()->route('inicio');

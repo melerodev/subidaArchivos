@@ -2,7 +2,7 @@ const file = document.getElementById('file');
 const text = document.getElementById('text');
 const button = document.getElementById('button');
 // expresion regular para una url de una imagen
-const url = /^https?:\/\/.*\.(png|jpg|jpeg|gif)$/;
+const url = /\b((http|https):\/\/)?((www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(\/[a-zA-Z0-9-._~:\/?#[\]@!$&\'()*+,;=]*)?\b/;
 
 text.addEventListener('input', () => {
     if (text.value.length > 0) {
