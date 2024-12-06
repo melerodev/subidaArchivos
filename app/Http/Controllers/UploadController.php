@@ -10,54 +10,58 @@ class UploadController extends Controller
     public function upload(Request $request)
     {
         $urlRegex = '/\b((http|https):\/\/)?((www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(\/[a-zA-Z0-9-._~:\/?#[\]@!$&\'()*+,;=]*)?\b/';
-        if ($request->input("action") > 0) {
-            $url = $request->input('action');
-            if (preg_match($urlRegex, $url)) {
-                $imageContents = file_get_contents($url);
-                if ($imageContents === false) {
-                    return redirect()->route('subida-archivos')->with('error', '');
+        try {
+            if ($request->input("action") > 0) {
+                $url = $request->input('action');
+                if (preg_match($urlRegex, $url)) {
+                    $imageContents = file_get_contents($url);
+                    if ($imageContents === false) {
+                        return redirect()->route('subida-archivos')->with('error', 'Error al obtener el contenido de la imagen.');
+                    }
+
+                    $path = storage_path('app/private/') . '/' . basename($url);
+                    file_put_contents($path, $imageContents);  // Guardar el archivo en el almacenamiento privado
+
+                    // Redimensionar la imagen
+                    if (!$this->redimensionarImagen($path, 300, 300)) {
+                        return redirect()->route('subida-archivos')->with('error', 'Error al redimensionar la imagen.');
+                    }
+
+                    $file = new File();
+                    $file->path = $path;
+                    $file->image64 = base64_encode(file_get_contents($path));
+                    $file->image = file_get_contents($path);
+                    $file->type = pathinfo($path, PATHINFO_EXTENSION);
+                    $file->save();
+                    return redirect()->route('inicio');
+                } else {
+                    return redirect()->route('subida-archivos')->with('error', 'URL no válida.');
                 }
-
-                $path = storage_path('app/private/') . '/' . basename($url);
-                file_put_contents($path, $imageContents);  // Guardar el archivo en el almacenamiento privado
-
-                // Redimensionar la imagen
-                if (!$this->redimensionarImagen($path, 300, 300)) {
-                    return redirect()->route('subida-archivos')->with('error', '');
-                }
-
-                $file = new File();
-                $file->path = $path;
-                $file->image64 = base64_encode(file_get_contents($path));
-                $file->image = file_get_contents($path);
-                $file->type = pathinfo($path, PATHINFO_EXTENSION);
-                $file->save();
-                return redirect()->route('inicio');
             } else {
-                return redirect()->route('subida-archivos')->with('error', '');
-            }
-        } else {
-            if ($this->esValido($request)) {
-                // Guardar el archivo subido en el almacenamiento privado
-                $path = $request->file('file')->store('private', 'local');
-                $realPath = storage_path('app/private') . '/' . $path; // Ruta real del archivo
+                if ($this->esValido($request)) {
+                    // Guardar el archivo subido en el almacenamiento privado
+                    $path = $request->file('file')->store('private', 'local');
+                    $realPath = storage_path('app/private') . '/' . $path; // Ruta real del archivo
     
-                // Redimensionar la imagen
-                if (!$this->redimensionarImagen($realPath, 300, 300)) {
-                    return redirect()->route('subida-archivos')->with('error', '');
+                    // Redimensionar la imagen
+                    if (!$this->redimensionarImagen($realPath, 300, 300)) {
+                        return redirect()->route('subida-archivos')->with('error', 'Error al redimensionar la imagen.');
+                    }
+    
+                    // Guardar el archivo en la base de datos
+                    $file = new File();
+                    $file->path = $realPath;
+                    $file->image64 = base64_encode(file_get_contents($realPath));
+                    $file->image = file_get_contents($realPath);
+                    $file->type = pathinfo($realPath, PATHINFO_EXTENSION);
+                    $file->save();
+                    return redirect()->route('inicio');
+                } else {
+                    return redirect()->route('subida-archivos')->with('error', 'Archivo no válido.');
                 }
-    
-                // Guardar el archivo en la base de datos
-                $file = new File();
-                $file->path = $path;
-                $file->image64 = base64_encode(file_get_contents($realPath));
-                $file->image = file_get_contents($realPath);
-                $file->type = pathinfo($path, PATHINFO_EXTENSION);
-                $file->save();
-                return redirect()->route('inicio');
-            } else {
-                return redirect()->route('subida-archivos')->with('error', '');
             }
+        } catch (\Exception $e) {
+            return redirect()->route('subida-archivos')->with('error', 'Ocurrió un error: ' . $e->getMessage());
         }
     }
 
