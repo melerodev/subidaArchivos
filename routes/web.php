@@ -10,3 +10,4 @@ Route::get('/subida-archivos', function () {
 })->name('subida-archivos');
 
 Route::post('/upload', [UploadController::class, 'upload'])->name('upload');
+Route::delete('/delete/{id}', [UploadController::class, 'destroy'])->name('delete');

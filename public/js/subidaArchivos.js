@@ -10,6 +10,7 @@ text.addEventListener('input', () => {
         if (text.value.match(url)) {
             text.style.border = '2px solid green';
             button.disabled = false;
+            button.style.backgroundColor = '#f07e13';
         } else {
             text.style.border = '2px solid red';
             button.disabled = true;
@@ -18,6 +19,7 @@ text.addEventListener('input', () => {
         text.style.border = '2px solid #f07e13';
         file.disabled = false;
         button.disabled = false;
+        button.style.backgroundColor = '#f5af6e';
     }
 });
 
@@ -29,3 +31,8 @@ file.addEventListener('change', () => {
         text.disabled = false;
     }
 });
+
+window.onload = () => {
+    button.disabled = false;
+    button.style.backgroundColor = '#f5af6e';
+};

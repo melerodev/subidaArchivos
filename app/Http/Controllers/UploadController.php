@@ -7,7 +7,6 @@ use App\Models\File;
 
 class UploadController extends Controller
 {
-    // expresión regular para una
     public function upload(Request $request)
     {
         $urlRegex = '/\b((http|https):\/\/)?((www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(\/[a-zA-Z0-9-._~:\/?#[\]@!$&\'()*+,;=]*)?\b/';
@@ -131,5 +130,21 @@ class UploadController extends Controller
         }
     
         return true;
+    }
+
+    public function destroy($id)
+    {
+        $file = File::findOrFail($id);
+        $filePath = $file->path;
+
+        // Eliminar el archivo del almacenamiento
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        // Eliminar el registro de la base de datos
+        $file->delete();
+
+        return redirect()->route('inicio')->with('success', 'Imagen eliminada correctamente.');
     }
 }
