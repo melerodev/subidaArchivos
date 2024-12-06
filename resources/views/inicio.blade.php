@@ -23,7 +23,7 @@
     @if(isset($sinArchivos) && $sinArchivos)
         <div class="no-archivos">
             <img src="{{ asset('img/bart.gif') }}" alt="No hay archivos">
-            <p>No hay archivos almacenados</p>
+            <p>No hay imágenes almacenados</p>
         </div>
     @endif
     @foreach($files as $file)
