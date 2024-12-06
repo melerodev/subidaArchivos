@@ -20,6 +20,12 @@
     <br/>
     <h1>Imágenes Almacenadas</h1>
     <section class="container-fotos">
+    @if(isset($sinArchivos) && $sinArchivos)
+        <div class="no-archivos">
+            <img src="{{ asset('img/bart.gif') }}" alt="No hay archivos">
+            <p>No hay archivos almacenados</p>
+        </div>
+    @endif
     @foreach($files as $file)
         <div class="foto-container">
             <img src="data:image/{{ $file->type }};base64,{{ $file->image64 }}" alt="Imagen subida">

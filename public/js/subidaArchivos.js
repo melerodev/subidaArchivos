@@ -5,6 +5,7 @@ const button = document.getElementById('button');
 const url = /\b((http|https):\/\/)?((www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(\/[a-zA-Z0-9-._~:\/?#[\]@!$&\'()*+,;=]*)?\b/;
 
 text.addEventListener('input', () => {
+    console.log(file);
     if (text.value.length > 0) {
         file.disabled = true;
         if (text.value.match(url)) {
@@ -23,16 +24,18 @@ text.addEventListener('input', () => {
     }
 });
 
-
 file.addEventListener('change', () => {
     if (file.files.length > 0) {
-        text.disabled = true;
+        console.log("hola");
+        button.disabled = false;
+        button.style.backgroundColor = '#f07e13';
     } else {
-        text.disabled = false;
+        button.disabled = true;
+        button.style.backgroundColor = '#f5af6e';
     }
 });
 
 window.onload = () => {
-    button.disabled = false;
+    button.disabled = true;
     button.style.backgroundColor = '#f5af6e';
 };

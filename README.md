@@ -64,3 +64,31 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+## Cómo funciona la aplicación
+
+### 1. Página de Inicio
+
+La página de inicio muestra todas las imágenes almacenadas en la aplicación. Si no hay imágenes, se mostrará un mensaje indicando que no hay archivos almacenados.
+
+![Página de Inicio](/img/pagina-inicio.png)
+
+### 2. Subir una Imagen
+
+Para subir una nueva imagen, haz clic en el enlace `Añadir foto` en la barra de navegación. Serás redirigido a una página donde podrás seleccionar una imagen desde tu dispositivo o proporcionar una URL de una imagen.
+
+![Subir Imagen](img/imagen-subir.png)
+
+Después de eso tendrás que pulsarle al botón `Subir`.
+![alt text](img/boton-subir.png)
+
+### 3. Imagen Subida
+
+Una vez que la imagen se ha subido correctamente, se redimensionará a 300x300 píxeles y se almacenará en el almacenamiento privado de la aplicación. La imagen también se guardará en la base de datos con su contenido codificado en base64.
+
+![Imagen Subida](img/imagen-subida.png)
+### 4. Eliminar una Imagen
+
+Para eliminar una imagen, tienes poner el cursor encima de la imagen que quieres eliminar y después haz clic en el icono de la papelera arriba a la derecha. La imagen será eliminada de la base de datos y del almacenamiento.
+![alt text](img/borrar-imagen.png)

@@ -64,12 +64,7 @@ class UploadController extends Controller
             return redirect()->route('subida-archivos')->with('error', 'Ocurrió un error: ' . $e->getMessage());
         }
     }
-
-    public function index()
-    {
-        $files = File::all();
-        return view('inicio', ['files' => $files]);
-    }
+    
     public function esValido(Request $request) {
         $file = $request->file('file');
         $valido = true;
@@ -149,6 +144,16 @@ class UploadController extends Controller
         // Eliminar el registro de la base de datos
         $file->delete();
 
-        return redirect()->route('inicio')->with('success', 'Imagen eliminada correctamente.');
+        return redirect()->route(route: 'inicio')->with('success', 'Imagen eliminada correctamente.');
+    }
+
+    public function index()
+    {
+        $files = File::all();
+        if ($files->count() === 0) {
+            return view('inicio', ['files' => [], 'sinArchivos' => true]);
+        } else {
+            return view('inicio', ['files' => $files]);
+        }
     }
 }

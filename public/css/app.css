@@ -104,6 +104,23 @@ nav ul li a:hover::after, nav ul li a.active::after {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding-top: 5px;
     flex: 1;
+    .no-archivos {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        img {
+            width: 100%;
+            height: auto;
+        }
+        p {
+            color: var(--secondary-color);
+            font-size: 2rem;
+            padding-top: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+    }
     img {
         width: 300px;
         height: auto;
