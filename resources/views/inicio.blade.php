@@ -29,7 +29,7 @@
     @foreach($files as $file)
         <div class="foto-container">
             <img src="data:image/{{ $file->type }};base64,{{ $file->image64 }}" alt="Imagen subida">
-            <form action="{{ route('delete', $file->id) }}" method="POST" class="papelera">
+            <form action="{{ route('delete', $file->id) }}" method="POST" class="papelera" onsubmit="return confirmDelete()">
                 @csrf
                 @method('DELETE')
                 <button type="submit" style="background: none; border: none; cursor: pointer;">
@@ -43,5 +43,10 @@
         <a href="https://github.com/melerodev/subidaArchivos" target="_blank"><i class="fa-brands fa-github"></i></a>
         <p>By: Alejandro Melero Zhohal</p>
     </footer>
+    <script>
+        function confirmDelete() {
+            return confirm('¿Estás seguro de que deseas eliminar esta imagen?');
+        }
+    </script>
 </body>
 </html>
